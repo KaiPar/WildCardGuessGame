@@ -167,7 +167,7 @@ def main():
                     textRect2.center = (QUES_WIDTH + 40, QUES_HEIGHT + 300)
                     screen.blit(textSurf2, textRect2)
                     end = True
-                    break
+                    
             else:
                 curr_ques += 1
                 hint = ""
@@ -186,7 +186,7 @@ def main():
                     textRect2.center = (QUES_WIDTH + 40, QUES_HEIGHT + 300)
                     screen.blit(textSurf2, textRect2)
                     end = True
-                    break                                
+                                                    
 
         screen.blit(answer.get_surface(), (QUES_WIDTH, QUES_HEIGHT + 50))                                    
 
