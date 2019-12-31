@@ -12,6 +12,18 @@ COLOR_BLACK = (0,0,0)
 COLOR_RED = (255, 0, 0)
 ans = ['bill gates', 'elon musk', 'satya nadella', 'sundar pichai', 'mukesh ambani', 'lloyd blankfein', 'larry page', 'sergey brin','valentina tereshkova', 'yuri gagarin']
 
+hints = ['Founder of Microsoft',
+         'CEO of Tesla, SpaceX, The Boring Company',
+         'CEO of Microsoft',
+         'CEO of Google',
+         'CEO of Reliance Industries',
+         'ex-CEO of Goldman Sachs',
+         'Founder of Google',
+         'Co-Founder of Google',
+         'First Woman in space',
+         'First Man in Space'
+         ]
+
 score = 0
 
 
@@ -47,12 +59,14 @@ def main():
     answer = pygame_textinput.TextInput()
 
     score_txt = show_txt("Score: " + str(score))
+    hint = ""
 
     running = True
 
     img, txt = ques.gen_ques()
 
     sub_button = pygame.Rect(QUES_WIDTH, QUES_HEIGHT + 100, 150, 50)
+    hint_btn = pygame.Rect(QUES_WIDTH, QUES_HEIGHT + 350, 150, 50)
 
     while running:
         smallText = pygame.font.Font("freesansbold.ttf",20)
@@ -70,6 +84,7 @@ def main():
                     if ans[curr_ques-1] == usr_answer:
                         curr_ques += 1
                         if curr_ques <= 10: 
+                            hint = ""
                             print("Correct")
                             correct = "Correct!"                     
                             score += 1
@@ -80,6 +95,7 @@ def main():
                             ques = question(curr_ques)
                             img, txt = ques.gen_ques()                           
                         else:
+                            hint = ""
                             print("Correct")
                             correct = "Correct!"                     
                             score += 1
@@ -92,6 +108,7 @@ def main():
                             # running = False                                                       
                     else:
                         if curr_ques <= 10:
+                            hint = ""
                             print("Wrong")
                             correct = "Wrong!"
                             time.sleep(0.5)
@@ -99,6 +116,7 @@ def main():
                             ques = question(curr_ques)
                             img, txt = ques.gen_ques()
                         else:
+                            hint = ""
                             print("Wrong")
                             correct = "Wrong!"                     
                             score += 1
@@ -107,15 +125,20 @@ def main():
                             textRect2.center = (QUES_WIDTH + 40, QUES_HEIGHT + 300)
                             screen.blit(textSurf2, textRect2)
                             end = True
-                            break                            
+                            break   
+
+                if hint_btn.collidepoint(mouse_pos):
+                    hint = hints[curr_ques-1]
+                    print(hint)     
 
             
-
         screen.fill(COLOR_WHITE)
         screen.blit(img, (0,0))
 
         screen.blit(txt, (QUES_WIDTH, QUES_HEIGHT))
         pygame.draw.rect(screen, (0, 100, 0), sub_button)
+        pygame.draw.rect(screen, (0, 0, 200), hint_btn)
+
 
         if answer.update(events):
             print(answer.get_text())
@@ -124,6 +147,7 @@ def main():
                 # running = False            
             if ans[curr_ques-1] == usr_answer:
                 curr_ques += 1
+                hint = ""
                 if curr_ques <= 10: 
                     print("Correct")
                     correct = "Correct!"                     
@@ -146,6 +170,7 @@ def main():
                     break
             else:
                 curr_ques += 1
+                hint = ""
                 if curr_ques <= 10:
                     print("Wrong")
                     correct = "Wrong!"
@@ -163,10 +188,19 @@ def main():
                     end = True
                     break                                
 
-        screen.blit(answer.get_surface(), (QUES_WIDTH, QUES_HEIGHT + 50))
+        screen.blit(answer.get_surface(), (QUES_WIDTH, QUES_HEIGHT + 50))                                    
+
 
         textSurf, textRect = text_objects("Check", smallText, screen, COLOR_WHITE)
         textRect.center = (QUES_WIDTH + 70, QUES_HEIGHT+125)
+        screen.blit(textSurf, textRect)
+
+        textSurf3, textRect3 = text_objects(hint, smallText, screen, (200, 200, 200))
+        textRect3.center = (SCREEN_WIDTH//2, (SCREEN_HEIGHT//2) + 200)
+        screen.blit(textSurf3, textRect3)          
+
+        textSurf, textRect = text_objects("Hint?", smallText, screen, COLOR_WHITE)
+        textRect.center = (QUES_WIDTH + 70, QUES_HEIGHT+375)
         screen.blit(textSurf, textRect)
 
         textSurf2, textRect2 = text_objects(("Score: "+ str(score)), smallText, screen, COLOR_BLACK)
